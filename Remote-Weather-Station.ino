@@ -1,10 +1,12 @@
 #include <WiFi.h>
-#include "WiFi-Secrets.h"
+#include <HTTPClient.h>
+#include "Secrets.h"
 
-void setup()
+/**
+ * Function to connect the ESP32 to the WiFi network.
+ */
+void connect_to_wifi()
 {
-  Serial.begin(115200); // Start the Serial Monitor
-
   // Start the connection process
   Serial.printf("Connecting to %s\n", SECRET_SSID);
 
@@ -24,7 +26,13 @@ void setup()
   // Print the ESP32's IP address
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+}
 
+void setup()
+{
+  Serial.begin(115200); // Start the Serial Monitor
+  
+  connect_to_wifi();
 }
 
 void loop()
