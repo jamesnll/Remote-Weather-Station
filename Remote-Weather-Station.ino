@@ -4,6 +4,20 @@
 #include "Secrets.h"
 
 /**
+ * Ideas to implement:
+ *
+ * Implement various locations to request weather information.
+ *
+ * Use DHT11 module to add local weather.
+ *
+ * Use LCD module to display the weather information.
+ *
+ * Display the weather information onto a webpage from the ESP32.
+ *
+ * Use potentiometer and buttons to allow user to select which location to request weather information.
+ */
+
+/**
  * Function to connect the ESP32 to the WiFi network.
  */
 void connect_to_wifi()
@@ -99,5 +113,5 @@ void setup()
 
 void loop()
 {
-  
+
 }
