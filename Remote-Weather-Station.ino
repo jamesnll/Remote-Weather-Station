@@ -2,6 +2,12 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 #include "Secrets.h"
+#include "DHT.h"
+
+#define DHT_PIN 23
+#define DHT_TYPE DHT11
+
+using namespace std;
 
 /**
  * Ideas to implement:
@@ -16,6 +22,8 @@
  *
  * Use potentiometer and buttons to allow user to select which location to request weather information.
  */
+
+ DHT dht(DHT_PIN, DHT_TYPE);
 
 /**
  * Function to connect the ESP32 to the WiFi network.
@@ -106,12 +114,30 @@ void request_weather_info()
 void setup()
 {
   Serial.begin(115200); // Start the Serial Monitor
-  
+  analogSetAttenuation(ADC_11db);
   connect_to_wifi();
   request_weather_info();
+
+  dht.begin();
 }
 
 void loop()
 {
+  float dht_temp = dht.readTemperature();
+  float dht_humidity = dht.readHumidity();
 
+  // Check for errors
+  if (isnan(dht_temp) || isnan(dht_humidity))
+  {
+    Serial.println("Failed to read from DHT sensor.");
+    return;
+  }
+
+  // Compute heat index in Celcius
+  float dht_heat_index = dht.computeHeatIndex(dht_temp, dht_humidity, false);
+
+  Serial.println("--- Local Weather information ---");
+  Serial.printf("Temperature: %.2f\n Humidity: %2.f\nHeat Index: %.2f\n", dht_temp, dht_humidity, dht_heat_index);
+
+  delay(2000);
 }
